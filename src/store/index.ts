@@ -4,7 +4,6 @@ import { randomInt } from "crypto";
 import { GlobSync } from "glob";
 import { readFileSync } from "fs";
 
-//TODO: asset/resource? file or base64?
 import defaultFirstNames from "./defaultFirstNames";
 import defaultLastNames from "./defaultLastNames";
 import defaultParas from "./defaultParagraphs";
@@ -16,7 +15,7 @@ export function pickRandom<T = string>(options: T[]): T {
     return options[randomInt(0, options.length)];
 }
 
-const matchSentences = /\b.+?(?:[\.!]|(?=[\r\n\f]))/gi;
+const matchSentences = /\b.+?(?:[\.!?]|(?=[\r\n\f]))/gi;
 export function pickRandomSentence(sourceText: string): string {
     const matches = matchSentences.exec(sourceText);
     if (!matches) {
@@ -25,8 +24,6 @@ export function pickRandomSentence(sourceText: string): string {
 
     return pickRandom(matches);
 }
-
-
 
 
 @notifyAllErrors
@@ -42,6 +39,7 @@ export class DirectoryTextStore implements TextStore {
             customParagraphs: string[] = [];
 
         if (this._customDataRoot) {
+            debugger;
             new GlobSync(join(this._customDataRoot, "**", ".json"))
                 .found
                 .forEach(path => {
@@ -78,7 +76,7 @@ export class DirectoryTextStore implements TextStore {
     }
 
 
-    getFullName = () => `${pickRandom(this._firstNames)} ${pickRandom(this._lastNames)}`;
+    getFullName = () => this._lastNamesFirst ? `${pickRandom(this._lastNames)} ${pickRandom(this._firstNames)}` : `${pickRandom(this._firstNames)} ${pickRandom(this._lastNames)}`;
     getFirstName = () => pickRandom(this._firstNames);
     getLastName = () => pickRandom(this._lastNames);
 

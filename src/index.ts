@@ -9,11 +9,11 @@ let store: TextStore;
 export function activate(context: ExtensionContext) {
 	try {
 		const { customDataRoot, lastNamesFirst } = workspace.getConfiguration(extensionName) || {};
-		
+
 		store = new DirectoryTextStore(customDataRoot, lastNamesFirst);
 	} catch (err) {
 		window.showErrorMessage("Failed to initialize store", String(err));
-		
+
 		return;
 	}
 
@@ -28,73 +28,34 @@ export function activate(context: ExtensionContext) {
 				window.showInformationMessage("Unable to determine cursor position, check the position in the text editor");
 			}
 		}),
-		commands.registerTextEditorCommand(`${extensionName}.InsertSentence`, (editor, edit) => {
-			try {
-				const position = editor.selection.active;
 
-				if (position) {
-					edit.insert(position, store.getSentence());
-				} else {
-					window.showInformationMessage("Unable to determine cursor position, check the position in the text editor");
-				}
-			} catch (err) {
-				window.showErrorMessage("Failed to insert sentence", String(err));
+		commands.registerTextEditorCommand(`${extensionName}.InsertSentence`, (editor, edit) => {
+			const position = editor.selection.active;
+
+			if (position) {
+				edit.insert(position, store.getSentence());
+			} else {
+				window.showInformationMessage("Unable to determine cursor position, check the position in the text editor");
 			}
 		}),
 		commands.registerTextEditorCommand(`${extensionName}.InsertParagraph`, (editor, edit) => {
-			try {
-				const position = editor.selection.active;
+			const position = editor.selection.active;
 
-				if (position) {
-					edit.insert(position, store.getParagraph());
-				} else {
-					window.showInformationMessage("Unable to determine cursor position, check the position in the text editor");
-				}
-			} catch (err) {
-				window.showErrorMessage("Failed to insert paragraph", String(err));
+			if (position) {
+				edit.insert(position, store.getParagraph());
+			} else {
+				window.showInformationMessage("Unable to determine cursor position, check the position in the text editor");
 			}
 		}),
 
-		commands.registerCommand(`${extensionName}.CopyName`, () => {
-			try {
-				env.clipboard.writeText(store.getFullName());
-			} catch (err) {
-				window.showErrorMessage("Failed to copy name", String(err));
-			}
-		}),
-		commands.registerCommand(`${extensionName}.CopySentence`, () => {
-			try {
-				env.clipboard.writeText(store.getSentence());
-			} catch (err) {
-				window.showErrorMessage("Failed to copy sentence", String(err));
-			}
-		}),
-		commands.registerCommand(`${extensionName}.CopyParagraph`, () => {
-			try {
-				env.clipboard.writeText(store.getParagraph());
-			} catch (err) {
-				window.showErrorMessage("Failed to copy paragraph", String(err));
-			}
-		}),
 
-		commands.registerCommand(`${extensionName}.ExtractText`, () => window.showOpenDialog({}).then(uri => {
-			// if (uri) {
-			// 	store
-			// 		.addText(uri[0].fsPath)//TODO: allow multiple files
-			// 		.then(() => window
-			// 			.showInformationMessage("Source text replaced"));
-			// }
-		})),
-		commands.registerCommand(`${extensionName}.ExtractNames`, () => window.showOpenDialog({}).then(uri => {
-			// if (uri) {
-			// 	store
-			// 		.addNames(uri[0].fsPath)//TODO: allow multiple files
-			// 		.then(() => window
-			// 			.showInformationMessage("Name source replaced"));
-			// }
-		}))
+		commands.registerCommand(`${extensionName}.CopyName`, () => env.clipboard.writeText(store.getFullName())),
+		commands.registerCommand(`${extensionName}.FirstName`, () => env.clipboard.writeText(store.getFirstName())),
+		commands.registerCommand(`${extensionName}.LastName`, () => env.clipboard.writeText(store.getLastName())),
+
+		commands.registerCommand(`${extensionName}.CopySentence`, () => env.clipboard.writeText(store.getSentence())),
+		commands.registerCommand(`${extensionName}.CopyParagraph`, () => env.clipboard.writeText(store.getParagraph())),
 	);
 }
 
-export function deactivate() {
-}
+export function deactivate() { }

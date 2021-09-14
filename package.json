@@ -44,7 +44,7 @@
         "properties": {
           "text-generator.customDataRoot": {
             "type": "string",
-            "default": null,
+            "default": "C:\\test\\",
             "description": "Defines a directory from which alternate source data will be loaded."
           },
           "text-generator.lastNamesFirst": {
