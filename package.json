@@ -28,14 +28,18 @@
     "Other"
   ],
   "activationEvents": [
-    "onCommand:text-generator.InsertName",
+    "onCommand:text-generator.InsertFullName",
+    "onCommand:text-generator.InsertFirstName",
+    "onCommand:text-generator.InsertLastName",
+
+    "onCommand:text-generator.CopyFullName",
+    "onCommand:text-generator.CopyFirstName",
+    "onCommand:text-generator.CopyLastName",
+
     "onCommand:text-generator.InsertSentence",
     "onCommand:text-generator.InsertParagraph",
-    "onCommand:text-generator.CopyName",
     "onCommand:text-generator.CopySentence",
-    "onCommand:text-generator.CopyParagraph",
-    "onCommand:text-generator.ExtractText",
-    "onCommand:text-generator.ExtractNames"
+    "onCommand:text-generator.CopyParagraph"
   ],
   "contributes": {
     "configuration": [
@@ -57,20 +61,12 @@
     ],
     "commands": [
       {
-        "command": "text-generator.InsertName",
-        "title": "Insert a random name at the current cursor position"
-      },
-      {
         "command": "text-generator.InsertSentence",
         "title": "Insert a random sentence at the current cursor position"
       },
       {
         "command": "text-generator.InsertParagraph",
         "title": "Insert a random paragraph at the current cursor position"
-      },
-      {
-        "command": "text-generator.CopyName",
-        "title": "Copy a random name to the clipboard"
       },
       {
         "command": "text-generator.CopySentence",
@@ -80,13 +76,30 @@
         "command": "text-generator.CopyParagraph",
         "title": "Copy a random paragraph to the clipboard"
       },
+      
       {
-        "command": "text-generator.ExtractText",
-        "title": "Parse sentences and paragraphs from new-line separated values and save the results."
+        "command": "text-generator.InsertFullName",
+        "title": "Insert a random name at the current cursor position"
       },
       {
-        "command": "text-generator.ExtractNames",
-        "title": "Parse names from new-line separated values and save the results."
+        "command": "text-generator.InsertFirstName",
+        "title": "Insert a random name at the current cursor position"
+      },
+      {
+        "command": "text-generator.InsertLastName",
+        "title": "Insert a random name at the current cursor position"
+      },
+      {
+        "command": "text-generator.CopyFullName",
+        "title": "Copy a random name to the clipboard"
+      },
+      {
+        "command": "text-generator.CopyFirstName",
+        "title": "Copy a random first name to the clipboard"
+      },
+      {
+        "command": "text-generator.CopyLastName",
+        "title": "Copy a random last name to the clipboard"
       }
     ]
   },

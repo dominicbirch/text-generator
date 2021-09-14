@@ -1,5 +1,4 @@
 import type { TextStore } from "./abstractions";
-import { join } from "path";
 import { randomInt } from "crypto";
 import { GlobSync } from "glob";
 import { readFileSync } from "fs";
@@ -39,9 +38,9 @@ export class DirectoryTextStore implements TextStore {
             customParagraphs: string[] = [];
 
         if (this._customDataRoot) {
-            debugger;
-            new GlobSync(join(this._customDataRoot, "**", ".json"))
-                .found
+            const glob = new GlobSync("./**/*.json", { cwd: this._customDataRoot, absolute: true });
+
+            glob.found
                 .forEach(path => {
                     const
                         file = readFileSync(path, ""),

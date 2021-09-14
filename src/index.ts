@@ -1,10 +1,29 @@
 import { commands, ExtensionContext, env, window, workspace } from 'vscode';
 import { DirectoryTextStore } from './store';
-import type { TextStore } from "./store/abstractions";
+import type { EditorCallback, TextStore } from "./store/abstractions";
 
 
 const extensionName = "text-generator";
 let store: TextStore;
+
+
+export function insertTextAtCursor(getValue: () => string): EditorCallback {
+	return function (editor, edit) {
+		const position = editor.selection.active;
+
+		if (position) {
+			edit.insert(position, getValue());
+		} else {
+			window.showInformationMessage("Unable to determine cursor position, check the position in the text editor");
+		}
+	};
+}
+
+export function copyToClipboard(getValue: () => string) {
+	return function () {
+		env.clipboard.writeText(getValue());
+	};
+}
 
 export function activate(context: ExtensionContext) {
 	try {
@@ -17,44 +36,20 @@ export function activate(context: ExtensionContext) {
 		return;
 	}
 
-	//TODO: prompt for HTML/JSON/string escape
 	context.subscriptions.push(
-		commands.registerTextEditorCommand(`${extensionName}.InsertName`, (editor, edit) => {
-			const position = editor.selection.active;
+		commands.registerTextEditorCommand(`${extensionName}.InsertFullName`, insertTextAtCursor(store.getFullName)),
+		commands.registerTextEditorCommand(`${extensionName}.InsertFirstName`, insertTextAtCursor(store.getFirstName)),
+		commands.registerTextEditorCommand(`${extensionName}.InsertLastName`, insertTextAtCursor(store.getLastName)),
 
-			if (position) {
-				edit.insert(position, store.getFullName());
-			} else {
-				window.showInformationMessage("Unable to determine cursor position, check the position in the text editor");
-			}
-		}),
+		commands.registerTextEditorCommand(`${extensionName}.InsertSentence`, insertTextAtCursor(store.getSentence)),
+		commands.registerTextEditorCommand(`${extensionName}.InsertParagraph`, insertTextAtCursor(store.getParagraph)),
 
-		commands.registerTextEditorCommand(`${extensionName}.InsertSentence`, (editor, edit) => {
-			const position = editor.selection.active;
+		commands.registerCommand(`${extensionName}.CopyFullName`, copyToClipboard(store.getFullName)),
+		commands.registerCommand(`${extensionName}.CopyFirstName`, copyToClipboard(store.getFirstName)),
+		commands.registerCommand(`${extensionName}.CopyLastName`, copyToClipboard(store.getLastName)),
 
-			if (position) {
-				edit.insert(position, store.getSentence());
-			} else {
-				window.showInformationMessage("Unable to determine cursor position, check the position in the text editor");
-			}
-		}),
-		commands.registerTextEditorCommand(`${extensionName}.InsertParagraph`, (editor, edit) => {
-			const position = editor.selection.active;
-
-			if (position) {
-				edit.insert(position, store.getParagraph());
-			} else {
-				window.showInformationMessage("Unable to determine cursor position, check the position in the text editor");
-			}
-		}),
-
-
-		commands.registerCommand(`${extensionName}.CopyName`, () => env.clipboard.writeText(store.getFullName())),
-		commands.registerCommand(`${extensionName}.FirstName`, () => env.clipboard.writeText(store.getFirstName())),
-		commands.registerCommand(`${extensionName}.LastName`, () => env.clipboard.writeText(store.getLastName())),
-
-		commands.registerCommand(`${extensionName}.CopySentence`, () => env.clipboard.writeText(store.getSentence())),
-		commands.registerCommand(`${extensionName}.CopyParagraph`, () => env.clipboard.writeText(store.getParagraph())),
+		commands.registerCommand(`${extensionName}.CopySentence`, copyToClipboard(store.getSentence)),
+		commands.registerCommand(`${extensionName}.CopyParagraph`, copyToClipboard(store.getParagraph)),
 	);
 }
 
