@@ -1,0 +1,119 @@
+{
+  "name": "text-generator",
+  "version": "1.0.0",
+  "description": "Random text generator",
+  "main": "./dist/",
+  "module": "./dist/",
+  "types": "./dist/index.d.ts",
+  "scripts": {
+    "test": "jest",
+    "lint": "xo --fix",
+    "vscode:prepublish": "webpack --mode production",
+    "webpack": "webpack --mode development",
+    "webpack-dev": "webpack --mode development --watch"
+  },
+  "author": "Dominic Birch <dominicbirch@outlook.com> ",
+  "publisher": "Dominic Birch <dominicbirch@outlook.com> ",
+  "homepage": "",
+  "license": "MIT",
+  "keywords": [],
+  "repository": {
+    "type": "git",
+    "url": ""
+  },
+  "engines": {
+    "vscode": "^1.32.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "activationEvents": [
+    "onCommand:text-generator.InsertName",
+    "onCommand:text-generator.InsertSentence",
+    "onCommand:text-generator.InsertParagraph",
+    "onCommand:text-generator.CopyName",
+    "onCommand:text-generator.CopySentence",
+    "onCommand:text-generator.CopyParagraph",
+    "onCommand:text-generator.ExtractText",
+    "onCommand:text-generator.ExtractNames"
+  ],
+  "contributes": {
+    "configuration": [
+      {
+        "title": "Text Generator",
+        "properties": {
+          "text-generator.customDataRoot": {
+            "type": "string",
+            "default": null,
+            "description": "Defines a directory from which alternate source data will be loaded."
+          },
+          "text-generator.lastNamesFirst": {
+            "type": "boolean",
+            "default": false,
+            "description": "Provide last names first in generated full names."
+          }
+        }
+      }
+    ],
+    "commands": [
+      {
+        "command": "text-generator.InsertName",
+        "title": "Insert a random name at the current cursor position"
+      },
+      {
+        "command": "text-generator.InsertSentence",
+        "title": "Insert a random sentence at the current cursor position"
+      },
+      {
+        "command": "text-generator.InsertParagraph",
+        "title": "Insert a random paragraph at the current cursor position"
+      },
+      {
+        "command": "text-generator.CopyName",
+        "title": "Copy a random name to the clipboard"
+      },
+      {
+        "command": "text-generator.CopySentence",
+        "title": "Copy a random sentence to the clipboard"
+      },
+      {
+        "command": "text-generator.CopyParagraph",
+        "title": "Copy a random paragraph to the clipboard"
+      },
+      {
+        "command": "text-generator.ExtractText",
+        "title": "Parse sentences and paragraphs from new-line separated values and save the results."
+      },
+      {
+        "command": "text-generator.ExtractNames",
+        "title": "Parse names from new-line separated values and save the results."
+      }
+    ]
+  },
+  "xo": {
+    "envs": [
+      "es2021",
+      "node",
+      "jest"
+    ],
+    "prettier": true
+  },
+  "lint-staged": {
+    "*.{js,jsx,ts,tsx}": "xo --fix"
+  },
+  "devDependencies": {
+    "@types/glob": "^7.1.4",
+    "@types/node": "^12.12.0",
+    "@types/vscode": "^1.32.0",
+    "lint-staged": "^11.1.2",
+    "merge-options": "^3.0.4",
+    "ts-loader": "^9.2.5",
+    "typescript": "^4.4.2",
+    "webpack": "^5.52.0",
+    "webpack-cli": "^4.8.0",
+    "xo": "^0.44.0"
+  },
+  "dependencies": {
+    "glob": "^7.1.7"
+  }
+}
