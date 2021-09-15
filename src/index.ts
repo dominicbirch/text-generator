@@ -1,11 +1,11 @@
-import { commands, ExtensionContext, env, window, workspace } from 'vscode';
+import { readFileSync, writeFile } from 'fs';
+import { EOL } from 'os';
+import { commands, env, ExtensionContext, window, workspace } from 'vscode';
 import { DirectoryTextStore } from './store';
-import type { EditorCallback, TextStore } from "./store/abstractions";
-
+import type { EditorCallback, TextStore, WorkspaceOptions } from "./store/abstractions";
 
 const extensionName = "text-generator";
 let store: TextStore;
-
 
 export function insertTextAtCursor(getValue: () => string): EditorCallback {
 	return function (editor, edit) {
@@ -25,11 +25,14 @@ export function copyToClipboard(getValue: () => string) {
 	};
 }
 
+
 export function activate(context: ExtensionContext) {
 	try {
-		const { customDataRoot, lastNamesFirst } = workspace.getConfiguration(extensionName) || {};
+		const
+			config = workspace.getConfiguration(),
+			{ customDataRoot, defaultTheme } = config.get<WorkspaceOptions>(extensionName, {});
 
-		store = new DirectoryTextStore(customDataRoot, lastNamesFirst);
+		store = new DirectoryTextStore(customDataRoot, defaultTheme);
 	} catch (err) {
 		window.showErrorMessage("Failed to initialize store", String(err));
 
@@ -37,19 +40,54 @@ export function activate(context: ExtensionContext) {
 	}
 
 	context.subscriptions.push(
-		commands.registerTextEditorCommand(`${extensionName}.InsertFullName`, insertTextAtCursor(store.getFullName)),
-		commands.registerTextEditorCommand(`${extensionName}.InsertFirstName`, insertTextAtCursor(store.getFirstName)),
-		commands.registerTextEditorCommand(`${extensionName}.InsertLastName`, insertTextAtCursor(store.getLastName)),
-
 		commands.registerTextEditorCommand(`${extensionName}.InsertSentence`, insertTextAtCursor(store.getSentence)),
 		commands.registerTextEditorCommand(`${extensionName}.InsertParagraph`, insertTextAtCursor(store.getParagraph)),
 
-		commands.registerCommand(`${extensionName}.CopyFullName`, copyToClipboard(store.getFullName)),
-		commands.registerCommand(`${extensionName}.CopyFirstName`, copyToClipboard(store.getFirstName)),
-		commands.registerCommand(`${extensionName}.CopyLastName`, copyToClipboard(store.getLastName)),
-
 		commands.registerCommand(`${extensionName}.CopySentence`, copyToClipboard(store.getSentence)),
 		commands.registerCommand(`${extensionName}.CopyParagraph`, copyToClipboard(store.getParagraph)),
+
+		commands.registerCommand(`${extensionName}.ChangeTheme`, () => {
+			window.showQuickPick([
+				"Alice in wonderland",
+				"Lorem ipsum"
+			]);
+		}),
+
+		commands.registerCommand(`${extensionName}.ParseParagraphs`, () => window.showOpenDialog({
+			canSelectFiles: true,
+			canSelectFolders: false,
+			canSelectMany: true,
+			title: "Select one or more source texts",
+			filters: {
+				"Plain Text": ["txt"]
+			}
+		}).then(paths => {
+			if (!paths) { return; }
+
+			window.showSaveDialog({
+				title: "Save output",
+				filters: {
+					"JSON": ["json"]
+				}
+			}).then(outputPath => {
+				if (!outputPath) { return; }
+
+				let result = <string[]>[];
+				const
+					blocksOfNonWhitespaceLines = /(?:^|(?:\n|\r\n){2,})(.*?)(?=(?:\n|\r\n){2,}|$)/gis,
+					lineEndings = /(?:\r\n|\n|\r|\f)+/gmi;
+
+				paths.forEach(uri => {
+					const
+						content = readFileSync(uri.fsPath).toString("utf-8"),
+						paragraphs = Array.from(content.matchAll(blocksOfNonWhitespaceLines)).map(p => p[1].replace(lineEndings, EOL).trim());
+
+					result.push(...paragraphs);
+				});
+
+				writeFile(outputPath.fsPath, JSON.stringify(result), () => window.showInformationMessage("File saved to:", outputPath.fsPath));
+			})
+		}, error => window.showErrorMessage(String(error)))),
 	);
 }
 

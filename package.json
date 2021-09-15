@@ -28,18 +28,12 @@
     "Other"
   ],
   "activationEvents": [
-    "onCommand:text-generator.InsertFullName",
-    "onCommand:text-generator.InsertFirstName",
-    "onCommand:text-generator.InsertLastName",
-
-    "onCommand:text-generator.CopyFullName",
-    "onCommand:text-generator.CopyFirstName",
-    "onCommand:text-generator.CopyLastName",
-
     "onCommand:text-generator.InsertSentence",
     "onCommand:text-generator.InsertParagraph",
     "onCommand:text-generator.CopySentence",
-    "onCommand:text-generator.CopyParagraph"
+    "onCommand:text-generator.CopyParagraph",
+    "onCommand:text-generator.ParseParagraphs",
+    "onCommand:text-generator.ChangeTheme"
   ],
   "contributes": {
     "configuration": [
@@ -51,10 +45,14 @@
             "default": "C:\\test\\",
             "description": "Defines a directory from which alternate source data will be loaded."
           },
-          "text-generator.lastNamesFirst": {
-            "type": "boolean",
-            "default": false,
-            "description": "Provide last names first in generated full names."
+          "text-generator.defaultTheme": {
+            "type": "string",
+            "oneOf": [
+              "Alice in wonderland",
+              "Lorem ipsum"
+            ],
+            "default": "Alice in wonderland",
+            "description": "Defines the default source text."
           }
         }
       }
@@ -62,44 +60,27 @@
     "commands": [
       {
         "command": "text-generator.InsertSentence",
-        "title": "Insert a random sentence at the current cursor position"
+        "title": "Text Generator: Insert a random sentence at the current cursor position"
       },
       {
         "command": "text-generator.InsertParagraph",
-        "title": "Insert a random paragraph at the current cursor position"
+        "title": "Text Generator: Insert a random paragraph at the current cursor position"
       },
       {
         "command": "text-generator.CopySentence",
-        "title": "Copy a random sentence to the clipboard"
+        "title": "Text Generator: Copy a random sentence to the clipboard"
       },
       {
         "command": "text-generator.CopyParagraph",
-        "title": "Copy a random paragraph to the clipboard"
-      },
-      
-      {
-        "command": "text-generator.InsertFullName",
-        "title": "Insert a random name at the current cursor position"
+        "title": "Text Generator: Copy a random paragraph to the clipboard"
       },
       {
-        "command": "text-generator.InsertFirstName",
-        "title": "Insert a random name at the current cursor position"
+        "command": "text-generator.ParseParagraphs",
+        "title": "Text Generator: Parse and save a paragraph JSON file from plain text"
       },
       {
-        "command": "text-generator.InsertLastName",
-        "title": "Insert a random name at the current cursor position"
-      },
-      {
-        "command": "text-generator.CopyFullName",
-        "title": "Copy a random name to the clipboard"
-      },
-      {
-        "command": "text-generator.CopyFirstName",
-        "title": "Copy a random first name to the clipboard"
-      },
-      {
-        "command": "text-generator.CopyLastName",
-        "title": "Copy a random last name to the clipboard"
+        "command": "text-generator.ChangeTheme",
+        "title": "Text Generator: Change theme/source"
       }
     ]
   },
@@ -122,11 +103,12 @@
     "merge-options": "^3.0.4",
     "ts-loader": "^9.2.5",
     "typescript": "^4.4.2",
-    "webpack": "^5.52.0",
+    "webpack": "^5.52.1",
     "webpack-cli": "^4.8.0",
     "xo": "^0.44.0"
   },
   "dependencies": {
-    "glob": "^7.1.7"
+    "glob": "^7.1.7",
+    "remove": "^0.1.5"
   }
 }

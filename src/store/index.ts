@@ -1,13 +1,9 @@
-import type { TextStore } from "./abstractions";
 import { randomInt } from "crypto";
-import { GlobSync } from "glob";
 import { readFileSync } from "fs";
-
-import defaultFirstNames from "./defaultFirstNames";
-import defaultLastNames from "./defaultLastNames";
-import defaultParas from "./defaultParagraphs";
-
+import { GlobSync } from "glob";
+import type { DefaultTheme, TextStore } from "./abstractions";
 import { notifyAllErrors } from "./decorators";
+
 
 
 export function pickRandom<T = string>(options: T[]): T {
@@ -25,40 +21,21 @@ export function pickRandomSentence(sourceText: string): string {
 }
 
 
+
 @notifyAllErrors
 export class DirectoryTextStore implements TextStore {
-    private readonly _firstNames: string[];
-    private readonly _lastNames: string[];
     private readonly _paragraphs: string[];
 
-    constructor(private readonly _customDataRoot?: string, private readonly _lastNamesFirst?: boolean) {
-        let
-            customFirstNames: string[] = [],
-            customLastNames: string[] = [],
-            customParagraphs: string[] = [];
+    constructor(private readonly _customDataRoot?: string, private readonly _defaultTheme?: DefaultTheme) {
+        let customParagraphs: string[] = [];
 
         if (this._customDataRoot) {
             const glob = new GlobSync("./**/*.json", { cwd: this._customDataRoot, absolute: true });
-
             glob.found
                 .forEach(path => {
                     const
                         file = readFileSync(path, ""),
-                        { firstNames, lastNames, paragraphs } = JSON.parse(file) || {};
-
-                    if (firstNames?.length) {
-                        customFirstNames = [
-                            ...customFirstNames,
-                            ...firstNames
-                        ];
-                    }
-
-                    if (lastNames?.length) {
-                        customLastNames = [
-                            ...customLastNames,
-                            ...lastNames
-                        ];
-                    }
+                        paragraphs = JSON.parse(file) || {};
 
                     if (paragraphs?.length) {
                         customParagraphs = [
@@ -69,15 +46,10 @@ export class DirectoryTextStore implements TextStore {
                 });
         }
 
-        this._firstNames = customFirstNames.length ? customFirstNames : defaultFirstNames;
-        this._lastNames = customLastNames.length ? customLastNames : defaultLastNames;
-        this._paragraphs = customParagraphs.length ? customParagraphs : defaultParas;
+        this._paragraphs = customParagraphs.length
+            ? customParagraphs
+            : require(`./defaultThemes/${_defaultTheme}`);
     }
-
-
-    getFullName = () => this._lastNamesFirst ? `${pickRandom(this._lastNames)} ${pickRandom(this._firstNames)}` : `${pickRandom(this._firstNames)} ${pickRandom(this._lastNames)}`;
-    getFirstName = () => pickRandom(this._firstNames);
-    getLastName = () => pickRandom(this._lastNames);
 
     getSentence = () => pickRandomSentence(pickRandom(this._paragraphs));
     getParagraph = () => pickRandom(this._paragraphs);

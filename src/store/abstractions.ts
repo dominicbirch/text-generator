@@ -7,10 +7,14 @@ export type Class<T = any> = {
 export interface TextStore {
     getSentence(): string;
     getParagraph(): string;
-
-    getFullName(): string;
-    getFirstName(): string;
-    getLastName(): string;
 }
 
 export type EditorCallback = (editor: TextEditor, edit: TextEditorEdit, ...args: any[]) => void;
+
+export type DefaultTheme = "Alice in wonderland" | "Lorem ipsum";
+
+
+export type WorkspaceOptions = {
+    customDataRoot?: string;
+    defaultTheme?: DefaultTheme;
+};
