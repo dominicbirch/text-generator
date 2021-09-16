@@ -1,7 +1,6 @@
-import { commands, ConfigurationTarget, env, ExtensionContext, window, workspace } from 'vscode';
-import { DefaultThemes } from './defaultThemes';
+import { commands, env, ExtensionContext, window } from 'vscode';
 import { generate, pickRandom, pickRandomSentence } from './generator';
-import { getGeneratorOptions, getSourceParagraphs, insertAtCursor, parseAndSaveSourceParagraphs, setSourceParagraphs } from './utils';
+import { getGeneratorOptions, getSourceParagraphs, insertAtCursor, parseAndSaveSourceParagraphs, setDefaultTheme, setSourceParagraphs } from './utils';
 
 
 export async function activate(context: ExtensionContext) {
@@ -25,14 +24,7 @@ export async function activate(context: ExtensionContext) {
 		commands.registerCommand(`${extensionName}.CopySentence`, () => env.clipboard.writeText(pickRandomSentence(pickRandom(getSourceParagraphs(context))))),
 
 		commands.registerCommand(`${extensionName}.ParseParagraphs`, parseAndSaveSourceParagraphs),
-		commands.registerCommand(`${extensionName}.ChangeTheme`, async () => {
-			const theme = await window.showQuickPick(DefaultThemes);
-			if (theme) {
-				await workspace.getConfiguration().update(`${extensionName}.defaultTheme`, theme, ConfigurationTarget.Global);
-				await setSourceParagraphs(context, generate(getGeneratorOptions(context)));
-				console.info("Default theme updated to %s", theme);
-			}
-		}),
+		commands.registerCommand(`${extensionName}.ChangeTheme`, () => setDefaultTheme(context)),
 	);
 }
 

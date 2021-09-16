@@ -1,8 +1,9 @@
 import { readFileSync, writeFile } from "fs";
 import { EOL } from "os";
-import { ExtensionContext, window, workspace } from "vscode";
+import { ConfigurationTarget, ExtensionContext, window, workspace } from "vscode";
 import type { EditorCallback, GeneratorOptions } from "./abstractions";
 import DefaultGeneratorOptions from "./defaultOptions";
+import { DefaultThemes } from "./defaultThemes";
 import { generate } from "./generator";
 
 
@@ -66,6 +67,15 @@ export async function parseAndSaveSourceParagraphs(): Promise<void> {
     });
 
     writeFile(outputPath.fsPath, JSON.stringify(result), () => window.showInformationMessage("File saved", outputPath.fsPath));
+}
+
+export async function setDefaultTheme(context: Pick<ExtensionContext, "extension" | "globalState">) {
+    const theme = await window.showQuickPick(DefaultThemes);
+    if (theme) {
+        await workspace.getConfiguration().update(`${context.extension.packageJSON.name}.defaultTheme`, theme, ConfigurationTarget.Global);
+        await setSourceParagraphs(context, generate(getGeneratorOptions(context)));
+        console.info("Default theme updated to %s", theme);
+    }
 }
 
 
