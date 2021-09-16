@@ -50,38 +50,22 @@ export async function parseAndSaveSourceParagraphs(): Promise<void> {
         }
     });
     if (!outputPath) { return; }
-    
-    await window.withProgress({
-        title: "Parsing and saving new generator text",
-        cancellable: true,
-        location: ProgressLocation.Notification
-    }, async ({ report }, { isCancellationRequested }) => {
+
+    const
+        blocksOfNonWhitespaceLines = /(?:^|(?:\n|\r\n){2,})(.*?)(?=(?:\n|\r\n){2,}|$)/gis,
+        lineEndings = /(?:\r\n|\n|\r|\f)+/gmi;
+
+    let result = <string[]>[];
+    paths.forEach((uri, i) => {
         const
-            blocksOfNonWhitespaceLines = /(?:^|(?:\n|\r\n){2,})(.*?)(?=(?:\n|\r\n){2,}|$)/gis,
-            lineEndings = /(?:\r\n|\n|\r|\f)+/gmi;
+            content = readFileSync(uri.fsPath).toString("utf-8"),
+            paragraphs = Array.from(content.matchAll(blocksOfNonWhitespaceLines))
+                .map(p => p[1].replace(lineEndings, EOL).trim());
 
-        let result = <string[]>[];
-        paths.forEach((uri, i) => {
-            if (isCancellationRequested) { return; }
-
-            report({ message: `Processing ${uri.path}`, increment: i / paths.length });
-            debugger;
-            const
-                content = readFileSync(uri.fsPath).toString("utf-8"),
-                paragraphs = Array.from(content.matchAll(blocksOfNonWhitespaceLines))
-                    .map(p => p[1].replace(lineEndings, EOL).trim());
-
-            result.push(...paragraphs);
-        });
-
-        if (isCancellationRequested) { return; }
-
-        report({ message: `Writing JSON to ${outputPath.path}`, increment: paths.length - 1 / paths.length });
-        writeFile(outputPath.fsPath, JSON.stringify(result), () => window.showInformationMessage("File saved to:", outputPath.fsPath));
-        report({ message: `Complete`, increment: 1 });
+        result.push(...paragraphs);
     });
 
-    await window.showInformationMessage("Result saved", outputPath.fsPath);
+    writeFile(outputPath.fsPath, JSON.stringify(result), () => window.showInformationMessage("File saved to:", outputPath.fsPath));
 }
 
 
