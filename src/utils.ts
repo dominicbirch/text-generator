@@ -1,6 +1,6 @@
 import { readFileSync, writeFile } from "fs";
 import { EOL } from "os";
-import { ExtensionContext, ProgressLocation, window, workspace } from "vscode";
+import { ExtensionContext, window, workspace } from "vscode";
 import type { EditorCallback, GeneratorOptions } from "./abstractions";
 import DefaultGeneratorOptions from "./defaultOptions";
 import { generate } from "./generator";
@@ -65,7 +65,7 @@ export async function parseAndSaveSourceParagraphs(): Promise<void> {
         result.push(...paragraphs);
     });
 
-    writeFile(outputPath.fsPath, JSON.stringify(result), () => window.showInformationMessage("File saved to:", outputPath.fsPath));
+    writeFile(outputPath.fsPath, JSON.stringify(result), () => window.showInformationMessage("File saved", outputPath.fsPath));
 }
 
 
