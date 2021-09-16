@@ -20,11 +20,17 @@ export function monkeyPatchAllMethods(wrapper: (inner: Function, ...args: any[])
     };
 }
 
-/**Wrap all methods of the class in a try..catch which shows error toast notifications */
+/**Wrap all methods of the class in a try..catch */
 export const notifyAllErrors = monkeyPatchAllMethods((inner, ...args) => {
     try {
         return inner(...args);
     } catch (error) {
-        window.showErrorMessage(String(error));
+        console.error("Failure in %s", inner.name, error);
+        window.showErrorMessage(`Failure in ${inner.name}`, String(error));
     }
 });
+
+
+export function notifyErrors<T>(source: Thenable<T>, label?: string): Thenable<T> {
+	return source.then(x => x, reason => window.showErrorMessage(`Failed${label ? ` (${label})` : ""}`, String(reason)));
+}
