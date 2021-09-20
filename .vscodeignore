@@ -1,8 +1,11 @@
-.vscode
+.vscode/
 .gitignore
+.vscodeignore
 node_modules
 src/**
 webpack.config.*
 tsconfig.json
 package-lock.json
 yarn.lock
+*.txt
+*.vsix

@@ -2,7 +2,7 @@
   "name": "placeholder-text",
   "version": "1.0.0",
   "description": "Random text generator",
-  "main": "./dist/",
+  "main": "./dist/index.js",
   "module": "./dist/",
   "types": "./dist/index.d.ts",
   "scripts": {
@@ -12,8 +12,8 @@
     "webpack": "webpack --mode development",
     "webpack-dev": "webpack --mode development --watch"
   },
-  "author": "Dominic Birch <dominicbirch@outlook.com> ",
-  "publisher": "Dominic Birch <dominicbirch@outlook.com> ",
+  "author": "Dominic Birch <dominicbirch@outlook.com>",
+  "publisher": "ragingbeardstudios",
   "homepage": "",
   "license": "MIT",
   "keywords": [],
@@ -63,35 +63,35 @@
     "commands": [
       {
         "command": "placeholder-text.InsertSentence",
-        "title": "Text Generator: Insert a random sentence at the current cursor position"
+        "title": "Placeholder Text: Insert a random sentence at the current cursor position"
       },
       {
         "command": "placeholder-text.InsertParagraph",
-        "title": "Text Generator: Insert a random paragraph at the current cursor position"
+        "title": "Placeholder Text: Insert a random paragraph at the current cursor position"
       },
       {
         "command": "placeholder-text.InsertParagraphs",
-        "title": "Text Generator: Insert N random paragraphs at the current cursor position"
+        "title": "Placeholder Text: Insert N random paragraphs at the current cursor position"
       },
       {
         "command": "placeholder-text.CopySentence",
-        "title": "Text Generator: Copy a random sentence to the clipboard"
+        "title": "Placeholder Text: Copy a random sentence to the clipboard"
       },
       {
         "command": "placeholder-text.CopyParagraph",
-        "title": "Text Generator: Copy a random paragraph to the clipboard"
+        "title": "Placeholder Text: Copy a random paragraph to the clipboard"
       },
       {
         "command": "placeholder-text.CopyParagraphs",
-        "title": "Text Generator: Copy N random paragraphs to the clipboard"
+        "title": "Placeholder Text: Copy N random paragraphs to the clipboard"
       },
       {
         "command": "placeholder-text.ParseParagraphs",
-        "title": "Text Generator: Parse and save a paragraph JSON file from plain text"
+        "title": "Placeholder Text: Parse and save a paragraph JSON file from plain text"
       },
       {
         "command": "placeholder-text.ChangeTheme",
-        "title": "Text Generator: Change theme/source"
+        "title": "Placeholder Text: Change theme/source"
       }
     ]
   },
@@ -110,6 +110,7 @@
     "@types/glob": "^7.1.4",
     "@types/node": "^12.12.0",
     "@types/vscode": "^1.32.0",
+    "bundle-declarations-webpack-plugin": "^2.2.2",
     "lint-staged": "^11.1.2",
     "merge-options": "^3.0.4",
     "ts-loader": "^9.2.5",
@@ -119,6 +120,7 @@
     "xo": "^0.44.0"
   },
   "dependencies": {
+    "applicationinsights": "^2.1.7",
     "glob": "^7.1.7",
     "remove": "^0.1.5"
   }

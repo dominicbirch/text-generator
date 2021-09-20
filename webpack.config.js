@@ -1,7 +1,9 @@
 
 // @ts-check
 /** @typedef {import('webpack').Configuration} WebpackConfig **/
-const path = require('path');
+const { default: BundleDeclarationsWebpackPlugin } = require('bundle-declarations-webpack-plugin');
+const path = require('path'), { name: packageName } = require("./package.json");
+const { DefinePlugin } = require('webpack');
 
 module.exports = () =>
 	/** @type WebpackConfig */({
@@ -23,6 +25,10 @@ module.exports = () =>
 	resolve: {
 		extensions: ['.ts', 'js', 'json']
 	},
+	plugins: [
+		new DefinePlugin({ EXTENSION_NAME: JSON.stringify(packageName) }),
+		new BundleDeclarationsWebpackPlugin({ entry: "./src/index.ts" })
+	],
 	module: {
 		rules: [
 			{
