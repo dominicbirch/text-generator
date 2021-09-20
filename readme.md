@@ -1,3 +1,3 @@
-# text-generator
+# placeholder-text
 
 Random text generator

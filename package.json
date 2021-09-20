@@ -1,5 +1,5 @@
 {
-  "name": "text-generator",
+  "name": "placeholder-text",
   "version": "1.0.0",
   "description": "Random text generator",
   "main": "./dist/",
@@ -28,30 +28,33 @@
     "Other"
   ],
   "activationEvents": [
-    "onCommand:text-generator.InsertSentence",
-    "onCommand:text-generator.InsertParagraph",
-    "onCommand:text-generator.CopySentence",
-    "onCommand:text-generator.CopyParagraph",
-    "onCommand:text-generator.ParseParagraphs",
-    "onCommand:text-generator.ChangeTheme"
+    "onCommand:placeholder-text.InsertSentence",
+    "onCommand:placeholder-text.InsertParagraph",
+    "onCommand:placeholder-text.InsertParagraphs",
+    "onCommand:placeholder-text.CopySentence",
+    "onCommand:placeholder-text.CopyParagraph",
+    "onCommand:placeholder-text.CopyParagraphs",
+    "onCommand:placeholder-text.ParseParagraphs",
+    "onCommand:placeholder-text.ChangeTheme"
   ],
   "contributes": {
     "configuration": [
       {
         "title": "Text Generator",
         "properties": {
-          "text-generator.customDataRoot": {
+          "placeholder-text.customDataRoot": {
             "type": "string",
             "default": null,
             "description": "Defines a directory from which alternate source data will be loaded."
           },
-          "text-generator.defaultTheme": {
+          "placeholder-text.defaultTheme": {
             "type": "string",
             "oneOf": [
-              "Alice in wonderland",
-              "Lorem ipsum"
+              "Alice in Wonderland",
+              "Ghost in the Shell",
+              "Lorem Ipsum"
             ],
-            "default": "Alice in wonderland",
+            "default": "Ghost in the Shell",
             "description": "Defines the default source text."
           }
         }
@@ -59,27 +62,35 @@
     ],
     "commands": [
       {
-        "command": "text-generator.InsertSentence",
+        "command": "placeholder-text.InsertSentence",
         "title": "Text Generator: Insert a random sentence at the current cursor position"
       },
       {
-        "command": "text-generator.InsertParagraph",
+        "command": "placeholder-text.InsertParagraph",
         "title": "Text Generator: Insert a random paragraph at the current cursor position"
       },
       {
-        "command": "text-generator.CopySentence",
+        "command": "placeholder-text.InsertParagraphs",
+        "title": "Text Generator: Insert N random paragraphs at the current cursor position"
+      },
+      {
+        "command": "placeholder-text.CopySentence",
         "title": "Text Generator: Copy a random sentence to the clipboard"
       },
       {
-        "command": "text-generator.CopyParagraph",
+        "command": "placeholder-text.CopyParagraph",
         "title": "Text Generator: Copy a random paragraph to the clipboard"
       },
       {
-        "command": "text-generator.ParseParagraphs",
+        "command": "placeholder-text.CopyParagraphs",
+        "title": "Text Generator: Copy N random paragraphs to the clipboard"
+      },
+      {
+        "command": "placeholder-text.ParseParagraphs",
         "title": "Text Generator: Parse and save a paragraph JSON file from plain text"
       },
       {
-        "command": "text-generator.ChangeTheme",
+        "command": "placeholder-text.ChangeTheme",
         "title": "Text Generator: Change theme/source"
       }
     ]

@@ -1,5 +1,5 @@
 import type { GeneratorOptions } from "./abstractions";
 
 export default <GeneratorOptions>{
-    defaultTheme: "Alice in wonderland"
+    defaultTheme: "Ghost in the Shell"
 };

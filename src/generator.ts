@@ -1,7 +1,7 @@
 import { randomInt } from "crypto";
 import { readFileSync } from "fs";
 import { GlobSync } from "glob";
-import { GeneratorOptions } from "./abstractions";
+import type { GeneratorOptions } from "./abstractions";
 
 export function generate(options: GeneratorOptions): string[] {
     let customParagraphs: string[] = [];
