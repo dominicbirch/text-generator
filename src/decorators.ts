@@ -1,21 +1,26 @@
 import { window } from "vscode";
-import type { Class } from "./abstractions";
+import type { TypedClassDecorator, WrapperFunction } from "./abstractions";
 
-/**Wrap all methods of a class with some extended handling */
-export function monkeyPatchAllMethods(wrapper: (inner: Function, ...args: any[]) => any) {
-    return <T extends Class>(target: T) => class extends target {
+/**Wrap all methods of a class with some extended handling
+ * 
+ * Note this does _not_ include:
+ * * fields containing arrow functions as these require an instance.
+ * * constructors
+ * @param {TypedFunctionDecorator} wrapper The wrapper function to be applied to each function member.  This receives the unmodified function to be called as required.
+ * @returns {TypedClassDecorator} The class decorator function which may be used to apply the modifications to a class type.
+ */
+export function monkeyPatchAllMethods(wrapper: WrapperFunction): TypedClassDecorator {
+    return target => class extends target {
         constructor(...args: any[]) {
             super(...args);
 
-            Reflect.ownKeys(target.prototype).forEach(member => {
-                if (typeof target.prototype[member] === "function") {
-                    Object.defineProperty(this, member, {
-                        value: function (...memberArgs: any[]) {
-                            return wrapper(target.prototype[member], ...memberArgs);
-                        }
-                    });
-                }
-            });
+            Reflect.ownKeys(target.prototype)
+                .filter(member => typeof target.prototype[member] === "function")
+                .forEach(member => Object.defineProperty(this, member, {
+                    value: function (...memberArgs: any[]) {
+                        return wrapper(target.prototype[member], ...memberArgs);
+                    }
+                }));
         }
     };
 }
@@ -29,8 +34,3 @@ export const notifyAllErrors = monkeyPatchAllMethods((inner, ...args) => {
         window.showErrorMessage(`Failure in ${inner.name}`, String(error));
     }
 });
-
-
-export function notifyErrors<T>(source: Thenable<T>, label?: string): Thenable<T> {
-	return source.then(x => x, reason => window.showErrorMessage(`Failed${label ? ` (${label})` : ""}`, String(reason)));
-}

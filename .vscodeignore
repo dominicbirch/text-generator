@@ -4,8 +4,11 @@
 node_modules
 src/**
 webpack.config.*
+jest.config.*
 tsconfig.json
 package-lock.json
 yarn.lock
 *.txt
 *.vsix
+__mocks__/**
+__tests__/**

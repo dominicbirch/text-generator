@@ -13,6 +13,12 @@
                 "${workspaceFolder}/dist/**/*.js"
             ],
             "preLaunchTask": "npm: webpack"
+        },
+        {
+            "name": "Watch tests",
+            "type": "node-terminal",
+            "request": "launch",
+            "command": "npm t -- --watch"
         }
     ]
 }
