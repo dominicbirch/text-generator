@@ -1,5 +1,5 @@
 import type { TextEditor, TextEditorEdit } from "vscode";
-import { DefaultTheme } from "./defaultThemes";
+import type { DefaultTheme } from "./defaultThemes";
 
 export type Class<T = any> = {
     new(...args: any[]): T;

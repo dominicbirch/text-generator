@@ -6,7 +6,7 @@ import type { TypedClassDecorator, WrapperFunction } from "./abstractions";
  * Note this does _not_ include:
  * * fields containing arrow functions as these require an instance.
  * * constructors
- * @param {TypedFunctionDecorator} wrapper The wrapper function to be applied to each function member.  This receives the unmodified function to be called as required.
+ * @param {WrapperFunction} wrapper The wrapper function to be applied to each function member.  This receives the unmodified function to be called as required.
  * @returns {TypedClassDecorator} The class decorator function which may be used to apply the modifications to a class type.
  */
 export function monkeyPatchAllMethods(wrapper: WrapperFunction): TypedClassDecorator {
