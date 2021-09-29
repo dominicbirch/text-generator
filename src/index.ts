@@ -4,6 +4,7 @@ import { generate, pickRandom, pickRandomSentence } from './generator';
 import { getGeneratorOptions, getSourceParagraphs, insertAtCursor, parseAndSaveSourceParagraphs, setDefaultTheme, setSourceParagraphs } from './utils';
 
 
+/**Activates the vscode extension, registering its features. */
 export async function activate(context: ExtensionContext) {
 	const extensionName = context.extension.packageJSON.name;
 
@@ -56,4 +57,5 @@ export async function activate(context: ExtensionContext) {
 	);
 }
 
+/**Deactivates the vscode extension; this may be used for clean-up.*/
 export function deactivate() { }
