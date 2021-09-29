@@ -32,12 +32,13 @@ module.exports = () =>
 	module: {
 		rules: [
 			{
-				test: /\.ts$/i,
+				test: /(?<!\.test)\.ts$/i,
 				exclude: /node_modules/i,
 				use: [
 					{
 						loader: 'ts-loader',
 						options: {
+							onlyCompileBundledFiles: true,
 							compilerOptions: {
 								module: 'es6'
 							},

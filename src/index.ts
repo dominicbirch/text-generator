@@ -3,10 +3,9 @@ import { commands, env, ExtensionContext, window } from 'vscode';
 import { generate, pickRandom, pickRandomSentence } from './generator';
 import { getGeneratorOptions, getSourceParagraphs, insertAtCursor, parseAndSaveSourceParagraphs, setDefaultTheme, setSourceParagraphs } from './utils';
 
-declare const EXTENSION_NAME: string;
 
 export async function activate(context: ExtensionContext) {
-	const extensionName = EXTENSION_NAME;//context.extension.packageJSON.name;
+	const extensionName = context.extension.packageJSON.name;
 
 	try {
 		context.globalState.setKeysForSync([`${extensionName}.defaultTheme`]);

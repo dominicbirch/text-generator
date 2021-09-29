@@ -1,7 +1,7 @@
 .vscode/
+.coverage/
 .gitignore
 .vscodeignore
-node_modules
 src/**
 webpack.config.*
 jest.config.*

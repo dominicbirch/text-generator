@@ -1,4 +1,4 @@
-import assert = require("assert");
+import * as assert from "assert";
 import { readFileSync } from "fs";
 import { GlobSync } from "glob";
 import { mocked } from 'ts-jest/utils';
