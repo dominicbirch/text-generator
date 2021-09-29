@@ -1,5 +1,6 @@
 import { notifyAllErrors } from "./decorators";
 
+
 describe("notifyAllErrors", () => {
     it("suppresses errors thrown in function members of the modified class", () => {
         let one, two;

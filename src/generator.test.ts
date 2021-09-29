@@ -1,11 +1,12 @@
-import * as assert from "assert";
 import { readFileSync } from "fs";
 import { GlobSync } from "glob";
 import { mocked } from 'ts-jest/utils';
 import { generate, pickRandom, pickRandomSentence } from "./generator";
 
-jest.mock("glob");
-jest.mock("fs");
+
+jest
+    .mock("glob")
+    .mock("fs");
 
 describe(generate, () => {
     it("provides the correct default theme based on options", () => {
@@ -70,7 +71,7 @@ describe(pickRandom, () => {
 
 describe(pickRandomSentence, () => {
     it("throws if source string contains no sentences to match", () =>
-        assert.throws(() => pickRandomSentence("")));
+        expect(() => pickRandomSentence("")).toThrow());
 
     it("handles picking from a single sentence", () => {
         const source = "Time is a human construct.";

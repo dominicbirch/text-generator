@@ -81,7 +81,7 @@ export async function setDefaultTheme(context: Pick<ExtensionContext, "extension
 
 export function insertAtCursor(getValue: () => string): EditorCallback {
     return (editor, edit) => {
-        const position = editor.selection.active;
+        const position = editor.selection?.active;
         if (position) {
             edit.insert(position, getValue());
         }
