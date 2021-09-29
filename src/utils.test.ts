@@ -1,6 +1,6 @@
 import { readFileSync, writeFile } from "fs";
 import { mocked } from "ts-jest/utils";
-import { ExtensionContext, Position, TextEditor, TextEditorEdit, Uri, window, workspace } from "vscode";
+import { ExtensionContext, Uri, window, workspace } from "vscode";
 import DefaultGeneratorOptions from "./defaultOptions";
 import { DefaultThemes } from "./defaultThemes";
 import { generate } from "./generator";
