@@ -4,6 +4,7 @@ module.exports = {
   testEnvironment: 'node',
   clearMocks: true,
   collectCoverage: true,
+  coverageProvider: "v8",
   coverageReporters: ["json", "lcov", "text", "clover"],
   coverageDirectory: ".coverage/",
   collectCoverageFrom: [

@@ -1,4 +1,4 @@
-import type { TextEditor, TextEditorEdit } from "vscode";
+import type { ExtensionContext, TextEditor, TextEditorEdit } from "vscode";
 import type { DefaultTheme } from "./defaultThemes";
 
 
@@ -6,6 +6,9 @@ import type { DefaultTheme } from "./defaultThemes";
 export type Class<T = any> = {
     new(...args: any[]): T;
 }
+
+/**Provides the call signature of vscode's command callbacks. */
+export type CommandCallback = (...args: any[]) => any;
 
 /**Provides the call signature of vscode's editor callbacks.
  * @param editor The current vscode editor api instance.
@@ -33,4 +36,27 @@ export interface TypedClassDecorator {
      * @returns {T} The modified class type/constructor
      */
     <T extends Class<any>>(target: T): T;
+}
+
+
+export const CommandIds = [
+    "InsertSentence",
+    "InsertParagraph",
+    "InsertParagraphs",
+    "CopySentence",
+    "CopyParagraph",
+    "CopyParagraphs",
+    "ParseParagraphs",
+    "ChangeTheme"
+] as const;
+
+export type CommandId = typeof CommandIds[number];
+
+export interface Command<T extends Function = CommandCallback> {
+    readonly id: CommandId;
+    execute: T;
+}
+
+export interface CommandConstructor<T extends Function = CommandCallback> {
+    new(context: ExtensionContext): Command<T>;
 }

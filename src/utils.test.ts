@@ -43,7 +43,7 @@ const
         isActive: true,
         exports: [],
         activate: jest.fn(),
-        packageJSON: { name: "text-extension" },
+        packageJSON: { name: "test-extension" },
     },
     mockGlobalState = {
         keys: jest.fn(),

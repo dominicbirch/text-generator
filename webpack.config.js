@@ -40,7 +40,7 @@ module.exports = () =>
 						options: {
 							onlyCompileBundledFiles: true,
 							compilerOptions: {
-								module: 'es6'
+								module: 'es2020'
 							},
 						},
 					},
